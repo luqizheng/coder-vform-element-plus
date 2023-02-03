@@ -9,6 +9,7 @@
                    :clearable="field.options.clearable"
                    :filterable="field.options.filterable"
                    :placeholder="field.options.placeholder || i18nt('render.hint.selectPlaceholder')"
+                   :props="{ checkStrictly: field.options.checkStrictly, multiple: field.options.multiple, expandTrigger: 'hover' }"
                    @focus="handleFocusCustomEvent" @blur="handleBlurCustomEvent"
                    @change="handleChangeEvent">
       </el-cascader>
@@ -60,7 +61,9 @@ import { ElCascader } from 'element-plus'
       }
     },
     computed: {
-
+      showFullPath() {
+        return (this.field.options.showAllLevels === undefined) || !!this.field.options.showAllLevels
+      },
     },
     beforeCreate() {
       /* 这里不能访问方法和属性！！ */
