@@ -1,45 +1,21 @@
 <template>
-  <form-item-wrapper
-    :designer="designer"
-    :field="field"
-    :rules="rules"
-    :design-state="designState"
-    :parent-widget="parentWidget"
-    :parent-list="parentList"
-    :index-of-parent-list="indexOfParentList"
-    :sub-form-row-index="subFormRowIndex"
-    :sub-form-col-index="subFormColIndex"
-    :sub-form-row-id="subFormRowId"
-  >
+  <form-item-wrapper :designer="designer" :field="field" :rules="rules" :design-state="designState"
+    :parent-widget="parentWidget" :parent-list="parentList" :index-of-parent-list="indexOfParentList"
+    :sub-form-row-index="subFormRowIndex" :sub-form-col-index="subFormColIndex" :sub-form-row-id="subFormRowId">
     <!-- el-upload增加:name="field.options.name"后，会导致又拍云上传失败！故删除之！！ -->
-    <el-upload
-      ref="fieldEditor"
-      :disabled="field.options.disabled"
-      :style="styleVariables"
-      class="dynamicPseudoAfter"
-      :action="field.options.uploadURL"
-      :headers="uploadHeaders"
-      :data="uploadData"
-      :with-credentials="field.options.withCredentials"
-      :multiple="field.options.multipleSelect"
-      :file-list="fileList"
-      :show-file-list="field.options.showFileList"
-      :class="{ hideUploadDiv: uploadBtnHidden }"
-      :limit="field.options.limit"
-      :on-exceed="handleFileExceed"
-      :before-upload="beforeFileUpload"
-      :on-success="handleFileUpload"
-      :on-error="handleUploadError"
-    >
+    <el-upload ref="fieldEditor" :disabled="field.options.disabled" :style="styleVariables" class="dynamicPseudoAfter"
+      :action="field.options.uploadURL" :headers="uploadHeaders" :data="uploadData"
+      :with-credentials="field.options.withCredentials" :multiple="field.options.multipleSelect" :file-list="fileList"
+      :show-file-list="field.options.showFileList" :class="{ hideUploadDiv: uploadBtnHidden }"
+      :limit="field.options.limit" :on-exceed="handleFileExceed" :before-upload="beforeFileUpload"
+      :on-success="handleFileUpload" :on-error="handleUploadError">
       <template #tip>
         <div class="el-upload__tip" v-if="!!field.options.uploadTip">
           {{ field.options.uploadTip }}
         </div>
       </template>
       <template #default>
-        <svg-icon icon-class="el-plus" /><i
-          class="el-icon-plus avatar-uploader-icon"
-        ></i>
+        <svg-icon icon-class="el-plus" /><i class="el-icon-plus avatar-uploader-icon"></i>
       </template>
       <template #file="{ file }">
         <div class="upload-file-list">
@@ -47,19 +23,10 @@
             file.name
           }}</span>
           <a :href="file.url" download="" target="_blank">
-            <span
-              class="el-icon-download file-action"
-              :title="i18nt('render.hint.downloadFile')"
-            >
-              <svg-icon icon-class="el-download" /> </span
-          ></a>
-          <span
-            class="file-action"
-            :title="i18nt('render.hint.removeFile')"
-            v-if="!field.options.disabled"
-            @click="removeUploadFile(file.name, file.url, file.uid)"
-            ><svg-icon icon-class="el-delete"
-          /></span>
+            <span class="el-icon-download file-action" :title="i18nt('render.hint.downloadFile')">
+              <svg-icon icon-class="el-download" /> </span></a>
+          <span class="file-action" :title="i18nt('render.hint.removeFile')" v-if="!field.options.disabled"
+            @click="removeUploadFile(file.name, file.url, file.uid)"><svg-icon icon-class="el-delete" /></span>
         </div>
       </template>
     </el-upload>
@@ -73,7 +40,7 @@ import {
   i18n,
   fieldMixin,
   FormItemWrapper,
-  util,SvgIcon,translate
+  util, SvgIcon, translate
 } from "coder-vform-render";
 const deepClone = util.deepClone;
 
@@ -110,8 +77,8 @@ export default {
     },
   },
   components: {
-    SvgIcon,ElUpload,
-   FormItemWrapper
+    SvgIcon, ElUpload,
+    FormItemWrapper
   },
   data() {
     return {
@@ -265,6 +232,12 @@ export default {
           customResult,
           res
         );
+        if (!!customResult && !!customResult.name) {
+          file.name = customResult.name
+        }
+        if (!!customResult && !!customResult.url) {
+          file.url = customResult.url
+        }
         this.fileList = deepClone(fileList);
         this.uploadBtnHidden = fileList.length >= this.field.options.limit;
       }
@@ -342,7 +315,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "./element.scss"; /* form-item-wrapper已引入，还需要重复引入吗？ */
+@import "./element.scss";
+/* form-item-wrapper已引入，还需要重复引入吗？ */
 
 .full-width-input {
   width: 100% !important;
@@ -351,6 +325,7 @@ export default {
 .dynamicPseudoAfter :deep(.el-upload.el-upload--text) {
   color: $--color-primary;
   font-size: 12px;
+
   .el-icon-plus:after {
     content: var(--select-file-action);
   }
